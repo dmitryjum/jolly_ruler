@@ -11,6 +11,28 @@ const ruleSchema = z.object({
   reward: z.number().int().optional(),
 });
 
+// rule payload example:
+
+// {
+//   "eventName": "visit",
+//   "ruleSchema": {
+//     "type": "and",
+//     "conditions": [
+//       {
+//         "type": "equals",
+//         "field": "correctClockInMethod",
+//         "value": true
+//       },
+//       {
+//         "type": "before",
+//         "field": "clockInTime",
+//         "compareToField": "scheduledStartTime"
+//       }
+//     ]
+//   },
+//   "reward": 5000
+// }
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -41,26 +63,18 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
+};
+
+//TODO: accept query params to filter rules by limit number return or/and pagination
+export async function GET() {
+  try {
+    const rules = await prisma.rule.findMany();
+    return NextResponse.json(rules, { status: 200 });
+  } catch (error: any) {
+    console.error(error);
+    return NextResponse.json(
+      { error: 'Failed to fetch rules', details: error.message },
+      { status: 500 }
+    );
+  }
 }
-
-// rule payload example:
-
-// {
-//   "eventName": "visit",
-//   "ruleSchema": {
-//     "type": "and",
-//     "conditions": [
-//       {
-//         "type": "equals",
-//         "field": "correctClockInMethod",
-//         "value": true
-//       },
-//       {
-//         "type": "before",
-//         "field": "clockInTime",
-//         "compareToField": "scheduledStartTime"
-//       }
-//     ]
-//   },
-//   "reward": 5000
-// }
