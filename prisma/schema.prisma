@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client-js"
+}
+ 
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  eventName   String
+  method      Boolean
+  reward      String?  // Optional reward for meeting the rule
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
