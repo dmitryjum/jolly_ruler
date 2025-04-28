@@ -8,11 +8,11 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Event {
+model Rule {
   id          String   @id @default(cuid())
   eventName   String
-  method      Boolean
-  reward      String?  // Optional reward for meeting the rule
+  ruleSchema  Json
+  reward      Int?  // Optional reward for meeting the rule
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
